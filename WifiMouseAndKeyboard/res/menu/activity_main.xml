@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_servers"
+        android:orderInCategory="1"
+        android:title="@string/menu_server"/>
+    <item
+        android:id="@+id/menu_settings"
+        android:orderInCategory="2"
+        android:title="@string/menu_settings"/>
+
+</menu>

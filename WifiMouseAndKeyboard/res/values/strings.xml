@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Wifi Mouse And Keyboard</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Cài Đặt</string>
+    <string name="mouse_sensitivity">Độ nhạy của chuột</string>
+    <string name="scroll_sensitivity">Độ nhạy khi cuộn</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_server_config">ServerConfigActivity</string>
+    <string name="default_port">7777</string>
+    <string name="default_ip">127.0.0.1</string>
+    <string name="ip_hint">Nhập IP</string>
+    <string name="port_hint">Port</string>
+    <string name="menu_server">Chọn Server</string>
+    <string name="connect">Kết Nối</string>
+
+</resources>
