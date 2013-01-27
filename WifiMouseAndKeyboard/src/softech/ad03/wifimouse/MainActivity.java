@@ -1,5 +1,8 @@
 package softech.ad03.wifimouse;
 
+import softech.ad03.wifimouse.classes.WrappedMotionEvent;
+import softech.ad03.wifimouse.mouse.event.One;
+import softech.ad03.wifimouse.mouse.event.Two;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,21 +11,23 @@ import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.GestureDetector.OnDoubleTapListener;
+import android.view.ScaleGestureDetector;
 
-public class MainActivity extends Activity implements
-		android.view.GestureDetector.OnGestureListener, OnDoubleTapListener {
-	private float xHistory, yHistory, xMove, yMove;
+public class MainActivity extends Activity {
 	GestureDetector mmGestureDetector;
+	ScaleGestureDetector scaleGestureDetector;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		Settings.init(this);
-		mmGestureDetector = new GestureDetector(this, this);
+		One oneTapEvent = new One();
+		Two twoEvent = new Two();
+		mmGestureDetector = new GestureDetector(this, oneTapEvent);
 		mmGestureDetector.setIsLongpressEnabled(false);
-		mmGestureDetector.setOnDoubleTapListener(this);
+		mmGestureDetector.setOnDoubleTapListener(oneTapEvent);
+		scaleGestureDetector = new ScaleGestureDetector(this, twoEvent);
 	}
 
 	@Override
@@ -56,103 +61,47 @@ public class MainActivity extends Activity implements
 
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
-		if (ev.getPointerCount() == 1)
-			return mmGestureDetector.onTouchEvent(ev);
-		return true;
-		// float xMove = 0f;
-		// float yMove = 0f;
-		// switch (ev.getAction()) {
+		mmGestureDetector.onTouchEvent(ev);
+		scaleGestureDetector.onTouchEvent(ev);
+		// switch (action) {
 		// case MotionEvent.ACTION_DOWN:
-		// xHistory = ev.getX();
-		// yHistory = ev.getY();
+		//
 		// break;
-		// case MotionEvent.ACTION_MOVE:
 		//
 		// default:
 		// break;
 		// }
+		// Settings.pointerCount = WrappedMotionEvent.getPointerCount(ev);
+		// Log.e("COUNT", "" + Settings.pointerCount);
+
+		// switch (action & MotionEvent.ACTION_MASK) {
+		// case MotionEvent.ACTION_DOWN:
+		// Settings.pointerCount = 1;
+		// Settings.lastTapTime = System.currentTimeMillis();
+		// break;
 		//
-		// if (ev.getAction() == MotionEvent.ACTION_MOVE) {
-		// xMove = ev.getX() - xHistory;
-		// yMove = ev.getY() - yHistory;
-		// xHistory = ev.getX();
-		// yHistory = ev.getY();
-		// Log.e("M", "" + xMove + "x" + yMove);
+		// case MotionEvent.ACTION_POINTER_DOWN:
+		// Settings.pointerCount = ev.getPointerCount();
+		// Settings.lastTapTime = System.currentTimeMillis();
+		// Settings.yHistory = ev.getY();
+		// break;
+		// case MotionEvent.ACTION_POINTER_UP:
+		// Log.e("E", "UP");
+		// if (ev.getPointerCount() == 0) {
+		// DupClick();
 		// }
-		// return true;
-	}
+		// }
 
-	@Override
-	public boolean onDoubleTap(MotionEvent e) {
-		// TODO Auto-generated method stub
-		Log.e("DOUBLE TAP", "MOUSE DOWN");
+		// if (Settings.pointerCount == 1)
+		// return mmGestureDetector.onTouchEvent(ev);
+
 		return true;
 	}
 
-	@Override
-	public boolean onDoubleTapEvent(MotionEvent e) {
-		// TODO Auto-generated method stub
-		if (e.getAction() == MotionEvent.ACTION_MOVE)
-			Log.e("DOUBLE TAP", "MOVE");
-		else if (e.getAction() == MotionEvent.ACTION_UP)
-			Log.e("DOUBLE TAP", "MOUSE UP");
-		return true;
-	}
-
-	@Override
-	public boolean onSingleTapConfirmed(MotionEvent e) {
-		// TODO Auto-generated method stub
-		Log.e("Mouse", "Left Click");
-		return true;
-	}
-
-	@Override
-	public boolean onDown(MotionEvent e) {
-		// TODO Auto-generated method stub
-		xHistory = e.getX();
-		yHistory = e.getY();
-		Log.e("A", "onDown");
-		return true;
-	}
-
-	@Override
-	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-			float velocityY) {
-		// TODO Auto-generated method stub
-		Log.e("A", "onFling");
-		return true;
-	}
-
-	@Override
-	public void onLongPress(MotionEvent e) {
-		// TODO Auto-generated method stub
-		Log.e("A", "onLongPress");
-
-	}
-
-	@Override
-	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-			float distanceY) {
-		// TODO Auto-generated method stub
-		xMove = distanceX - xHistory;
-		yMove = distanceY - yHistory;
-		xHistory = distanceX;
-		yHistory = distanceY;
-		Log.e("Mouse", "Move: " + xMove + "x" + yMove);
-		return true;
-	}
-
-	@Override
-	public void onShowPress(MotionEvent e) {
-		// TODO Auto-generated method stub
-		Log.e("A", "onShowPress");
-	}
-
-	@Override
-	public boolean onSingleTapUp(MotionEvent e) {
-		// TODO Auto-generated method stub
-		Log.e("A", "onSingleTapUp");
-		return true;
+	public void DupClick() {
+		if (Settings.pointerCount == 2) {
+			Log.e("Click", "Dup");
+		}
 	}
 
 }

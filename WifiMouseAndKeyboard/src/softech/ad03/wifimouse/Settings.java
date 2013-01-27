@@ -22,6 +22,11 @@ public class Settings {
 	private static final String PREFS_SCROLL_SENSITIVITY = "scrollSensitivity";
 	public static final int DEFAULT_PORT = 7777; // Port mặc định khi dò tìm server tự động
 	private static Context context;
+	public static float xHistory, yHistory, xMove, yMove;
+	public static long lastTapTime, last2TapTime;
+	public static int pointerCount;
+	public static float xWheelHistory, yWheelHistory;
+	public static int wheelCount = 0;
 
 	public static void init(Context context) {
 		Settings.context = context;
