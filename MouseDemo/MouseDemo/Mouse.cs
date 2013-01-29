@@ -19,7 +19,8 @@ namespace MouseDemo
 
         [DllImport("user32.dll")]
         private static extern void mouse_event(MouseEventFlags flags, uint dx, uint dy, int data, int extraInfo);
-
+        [DllImport("user32.dll")]
+        static extern bool SetCursorPos(int X, int Y);
         [Flags]
         private enum MouseEventFlags : uint
         {
@@ -85,7 +86,7 @@ namespace MouseDemo
 
         private static Point Previous;
 
-        public static void SmoothMove(uint X, uint Y, int TotalTime = 40, int StepsCount = 20)
+        public static void SmoothMove(uint X, uint Y, int TotalTime = 400, int StepsCount = 20)
         {
             var dx = (int)Math.Round((double)(X - Previous.X) / StepsCount);
             var dy = (int)Math.Round((double)(Y - Previous.Y) / StepsCount);

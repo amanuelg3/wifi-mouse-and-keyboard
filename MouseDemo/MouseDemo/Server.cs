@@ -23,13 +23,15 @@ namespace MouseDemo
             listener.Start();
             Console.WriteLine("Server started on " + listener.LocalEndpoint);
             new ClientHandler(listener);
+            Thread.Sleep(1000);
+            //Mouse.Move(20436, 20436);
             Console.Read();
 
         }
 
         static void Main(string[] args)
         {
-            new Server(9999);
+            new Server(7777);
         }
     }
 }

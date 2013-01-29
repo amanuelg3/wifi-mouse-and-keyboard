@@ -45,7 +45,6 @@ namespace MouseDemo
                     data = new byte[1024];
                     int recv = socket.Receive(data);
                     s = Encoding.ASCII.GetString(data, 0, recv);
-                    Console.WriteLine(s);
                     DoWork.Exec(s);
                 }
             };
