@@ -1,11 +1,18 @@
 package softech.ad03.wifimouse.mouse.event;
 
 import softech.ad03.wifimouse.Settings;
+import softech.ad03.wifimouse.socket.SendMessageAsyncTask;
+import softech.ad03.wifimouse.socket.Sender;
 import android.util.Log;
 import android.view.ScaleGestureDetector;
 import android.view.ScaleGestureDetector.OnScaleGestureListener;
 
 public class Two implements OnScaleGestureListener {
+	private Sender sender;
+
+	public Two(Sender sender) {
+		this.sender = sender;
+	}
 
 	@Override
 	public boolean onScale(ScaleGestureDetector detector) {
@@ -16,7 +23,8 @@ public class Two implements OnScaleGestureListener {
 			float yWheel = detector.getFocusY() - Settings.yWheelHistory;
 			Settings.xWheelHistory = detector.getFocusX();
 			Settings.yWheelHistory = detector.getFocusY();
-			Log.e("SCALE", "onScale " + yWheel);
+			new SendMessageAsyncTask(sender).execute(Settings.MOUSE_WHEEL, String.valueOf(yWheel));
+			Log.e("W", ""+yWheel);
 		}
 		return true;
 	}
@@ -35,8 +43,9 @@ public class Two implements OnScaleGestureListener {
 	public void onScaleEnd(ScaleGestureDetector detector) {
 		// TODO Auto-generated method stub
 		Settings.wheelCount = 0;
-		if (System.currentTimeMillis() - Settings.last2TapTime <= 200)
-			Log.e("Click", "Right Click");
+		if (System.currentTimeMillis() - Settings.last2TapTime <= 200) {
+			new SendMessageAsyncTask(sender).execute(Settings.RIGHT_MOUSE_CLICK);
+		}
 	}
 
 }

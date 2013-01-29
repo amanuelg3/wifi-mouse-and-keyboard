@@ -1,8 +1,11 @@
 package softech.ad03.wifimouse;
 
-import softech.ad03.wifimouse.classes.WrappedMotionEvent;
+import java.net.Socket;
+
 import softech.ad03.wifimouse.mouse.event.One;
 import softech.ad03.wifimouse.mouse.event.Two;
+import softech.ad03.wifimouse.socket.Receiver;
+import softech.ad03.wifimouse.socket.Sender;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,14 +19,30 @@ import android.view.ScaleGestureDetector;
 public class MainActivity extends Activity {
 	GestureDetector mmGestureDetector;
 	ScaleGestureDetector scaleGestureDetector;
+	private Socket theSocket;
+	private Receiver receiver;
+	private Sender sender;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		Settings.init(this);
-		One oneTapEvent = new One();
-		Two twoEvent = new Two();
+
+
+		try {
+			theSocket = new Socket("192.168.1.104", 7777);
+			sender = new Sender(theSocket); // Creates an instance of class								// Sender
+			receiver = new Receiver(this, theSocket); // Creates an instance of												// class Receiver
+			Log.e("S", "Connected to server");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Log.e("ER", "LOI");
+			e.printStackTrace();
+		}
+		
+		One oneTapEvent = new One(sender);	
+		Two twoEvent = new Two(sender);
 		mmGestureDetector = new GestureDetector(this, oneTapEvent);
 		mmGestureDetector.setIsLongpressEnabled(false);
 		mmGestureDetector.setOnDoubleTapListener(oneTapEvent);
@@ -63,45 +82,6 @@ public class MainActivity extends Activity {
 	public boolean onTouchEvent(MotionEvent ev) {
 		mmGestureDetector.onTouchEvent(ev);
 		scaleGestureDetector.onTouchEvent(ev);
-		// switch (action) {
-		// case MotionEvent.ACTION_DOWN:
-		//
-		// break;
-		//
-		// default:
-		// break;
-		// }
-		// Settings.pointerCount = WrappedMotionEvent.getPointerCount(ev);
-		// Log.e("COUNT", "" + Settings.pointerCount);
-
-		// switch (action & MotionEvent.ACTION_MASK) {
-		// case MotionEvent.ACTION_DOWN:
-		// Settings.pointerCount = 1;
-		// Settings.lastTapTime = System.currentTimeMillis();
-		// break;
-		//
-		// case MotionEvent.ACTION_POINTER_DOWN:
-		// Settings.pointerCount = ev.getPointerCount();
-		// Settings.lastTapTime = System.currentTimeMillis();
-		// Settings.yHistory = ev.getY();
-		// break;
-		// case MotionEvent.ACTION_POINTER_UP:
-		// Log.e("E", "UP");
-		// if (ev.getPointerCount() == 0) {
-		// DupClick();
-		// }
-		// }
-
-		// if (Settings.pointerCount == 1)
-		// return mmGestureDetector.onTouchEvent(ev);
-
 		return true;
 	}
-
-	public void DupClick() {
-		if (Settings.pointerCount == 2) {
-			Log.e("Click", "Dup");
-		}
-	}
-
 }

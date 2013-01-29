@@ -1,35 +1,46 @@
 package softech.ad03.wifimouse.mouse.event;
 
 import softech.ad03.wifimouse.Settings;
-import android.util.Log;
+import softech.ad03.wifimouse.socket.SendMessageAsyncTask;
+import softech.ad03.wifimouse.socket.Sender;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 
 public class One implements OnGestureListener, OnDoubleTapListener {
+	private Sender sender;
+
+	public One(Sender sender) {
+		this.sender = sender;
+	}
 
 	@Override
 	public boolean onDoubleTap(MotionEvent e) {
 		// TODO Auto-generated method stub
-		Log.e("DOUBLE TAP", "MOUSE DOWN");
+		new SendMessageAsyncTask(sender).execute(Settings.LEFT_MOUSE_DOWN);
 		return true;
 	}
 
 	@Override
 	public boolean onDoubleTapEvent(MotionEvent e) {
 		// TODO Auto-generated method stub
-		if (e.getAction() == MotionEvent.ACTION_MOVE)
-			Log.e("DOUBLE TAP", "MOVE");
-		else if (e.getAction() == MotionEvent.ACTION_UP)
-			Log.e("DOUBLE TAP", "MOUSE UP");
+		if (e.getAction() == MotionEvent.ACTION_MOVE) {
+			Settings.xMove = e.getX() - Settings.xHistory;
+			Settings.yMove = e.getY() - Settings.yHistory;
+			Settings.xHistory = e.getX();
+			Settings.yHistory = e.getY();
+			new SendMessageAsyncTask(sender).execute(Settings.MOUSE_MOVE,
+					String.valueOf(Settings.xMove),
+					String.valueOf(Settings.yMove));
+		} else if (e.getAction() == MotionEvent.ACTION_UP)
+			new SendMessageAsyncTask(sender).execute(Settings.LEFT_MOUSE_UP);
 		return true;
 	}
 
 	@Override
 	public boolean onSingleTapConfirmed(MotionEvent e) {
 		// TODO Auto-generated method stub
-
-		Log.e("Mouse", "Left Click");
+		new SendMessageAsyncTask(sender).execute(Settings.LEFT_MOUSE_CLICK);
 		return true;
 	}
 
@@ -56,12 +67,15 @@ public class One implements OnGestureListener, OnDoubleTapListener {
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 			float distanceY) {
+
 		// TODO Auto-generated method stub
-		Settings.xMove = distanceX - Settings.xHistory;
-		Settings.yMove = distanceY - Settings.yHistory;
-		Settings.xHistory = distanceX;
-		Settings.yHistory = distanceY;
-		Log.e("Mouse", "Move: " + Settings.xMove + "x" + Settings.yMove);
+		Settings.xMove = e2.getX() - Settings.xHistory;
+		Settings.yMove = e2.getY() - Settings.yHistory;
+		Settings.xHistory = e2.getX();
+		Settings.yHistory = e2.getY();
+		new SendMessageAsyncTask(sender).execute(Settings.MOUSE_MOVE,
+				String.valueOf(Settings.xMove), String.valueOf(Settings.yMove));
+
 		return true;
 	}
 

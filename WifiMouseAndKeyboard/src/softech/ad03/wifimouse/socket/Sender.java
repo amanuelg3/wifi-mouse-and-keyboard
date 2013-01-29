@@ -4,6 +4,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import android.util.Log;
+
 public class Sender {
 	private DataOutputStream out;
 
@@ -11,7 +13,8 @@ public class Sender {
 
 		try {
 			out = new DataOutputStream(theSocket.getOutputStream());
-		} catch (IOException iE) {
+		} catch (Exception e) {
+			Log.e("Error", "Khong the tao Sender");
 		}
 	}
 

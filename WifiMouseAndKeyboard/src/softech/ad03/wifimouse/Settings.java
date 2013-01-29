@@ -21,6 +21,19 @@ public class Settings {
 	private static final String PREFS_SENSITIVITY = "sensitivity";
 	private static final String PREFS_SCROLL_SENSITIVITY = "scrollSensitivity";
 	public static final int DEFAULT_PORT = 7777; // Port mặc định khi dò tìm server tự động
+	
+	
+	public static final String LEFT_MOUSE_CLICK = "1";
+	public static final String LEFT_MOUSE_DOWN = "2";
+	public static final String LEFT_MOUSE_UP = "3";
+	public static final String RIGHT_MOUSE_CLICK = "4";
+	public static final String RIGHT_MOUSE_DOWN = "5";
+	public static final String RIGHT_MOUSE_UP = "6";
+	public static final String MOUSE_MOVE = "7";
+    public static final String MOUSE_DOUBLE_CLICK = "8";
+    public static final String MOUSE_WHEEL = "9";
+	
+	
 	private static Context context;
 	public static float xHistory, yHistory, xMove, yMove;
 	public static long lastTapTime, last2TapTime;
@@ -35,7 +48,7 @@ public class Settings {
 					Context.MODE_PRIVATE);
 			
 			// Lấy cấu hình người dùng ra
-			ip = prefs.getString(PREFS_IPKEY, "127.0.0.1");
+			ip = prefs.getString(PREFS_IPKEY, "192.168.1.104");
 			sensitivity = prefs.getInt(Settings.PREFS_SENSITIVITY, 0);
 			scrollSensitivity = prefs.getInt(Settings.PREFS_SCROLL_SENSITIVITY, 50);
 		}
