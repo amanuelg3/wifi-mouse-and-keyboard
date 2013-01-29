@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CoreAudioApi">
+      <HintPath>..\..\..\..\..\..\Desktop\CoreAudio2_Src\CoreAudioApi\bin\Debug\CoreAudioApi.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />

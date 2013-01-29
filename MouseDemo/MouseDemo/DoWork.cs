@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoreAudioApi;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -24,8 +25,11 @@ namespace MouseDemo
         private const String MOUSE_MOVE = "7";
         private const String MOUSE_DOUBLE_CLICK = "8";
         private const String MOUSE_WHEEL = "9";
+        private const String VOLUME_UP = "10";
+        private const String VOLUME_DOWN = "11";
         private static bool canMove = true;
-
+        private static MMDeviceEnumerator DevEnum = new MMDeviceEnumerator();
+        private static MMDevice device = DevEnum.GetDefaultAudioEndpoint(EDataFlow.eRender, ERole.eMultimedia);
 
         public static Rectangle screenBounds = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
         public static void Exec(String str)
@@ -59,10 +63,27 @@ namespace MouseDemo
                     case LEFT_MOUSE_UP:
                         Mouse.LeftUp();
                         break;
+                    case MOUSE_DOUBLE_CLICK:
+                        Mouse.LeftClick();
+                        Mouse.LeftClick();
+                        break;
                     case MOUSE_WHEEL:
                         double amount = Convert.ToDouble(strArr[2]) * 50;
                         Mouse.Wheel((int)amount);
                         break;
+                    case VOLUME_UP:
+                        if (device.AudioEndpointVolume.MasterVolumeLevelScalar < 0.97f)
+                            device.AudioEndpointVolume.MasterVolumeLevelScalar += 0.03f;
+                        else
+                            device.AudioEndpointVolume.MasterVolumeLevelScalar = 1;
+                        break;
+                    case VOLUME_DOWN:
+                        if (device.AudioEndpointVolume.MasterVolumeLevelScalar > 0.03f)
+                            device.AudioEndpointVolume.MasterVolumeLevelScalar -= 0.03f;
+                        else
+                            device.AudioEndpointVolume.MasterVolumeLevelScalar = 0;
+                        break;
+
 
                 }
             }

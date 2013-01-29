@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoreAudioApi;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -15,7 +16,7 @@ namespace MouseDemo
 {
     class Server
     {
-        
+        private MMDevice device;
         public Server(int port)
         {
             IPAddress address = IPAddress.Any;
@@ -23,7 +24,8 @@ namespace MouseDemo
             listener.Start();
             Console.WriteLine("Server started on " + listener.LocalEndpoint);
             new ClientHandler(listener);
-            Thread.Sleep(1000);
+            MMDeviceEnumerator DevEnum = new MMDeviceEnumerator();
+            device = DevEnum.GetDefaultAudioEndpoint(EDataFlow.eRender, ERole.eMultimedia);
             //Mouse.Move(20436, 20436);
             Console.Read();
 
