@@ -26,14 +26,6 @@ namespace MouseDemo
             Console.Read();
 
         }
-        public void moveMouse(double x, double y)
-        {
-            x *= 65.535 / screenBounds.Width; ;
-            x += Cursor.Position.X * 65535 / screenBounds.Width;
-            y *= 65.535 / screenBounds.Height;
-            y += Cursor.Position.Y * 65535 / screenBounds.Height;
-            Mouse.SmoothMove((uint)x, (uint)y);
-        }
 
         static void Main(string[] args)
         {
