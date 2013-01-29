@@ -14,5 +14,7 @@
     <string name="port_hint">Port</string>
     <string name="menu_server">Chọn Server</string>
     <string name="connect">Kết Nối</string>
+    <string name="invalid_ip_address">Địa chỉ ip không hợp lệ</string>
+    <string name="invalid_port">Cổng kết nối không hợp lệ</string>
 
 </resources>

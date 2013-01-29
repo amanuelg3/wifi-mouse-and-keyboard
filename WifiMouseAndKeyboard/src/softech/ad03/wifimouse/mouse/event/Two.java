@@ -24,7 +24,6 @@ public class Two implements OnScaleGestureListener {
 			Settings.xWheelHistory = detector.getFocusX();
 			Settings.yWheelHistory = detector.getFocusY();
 			new SendMessageAsyncTask(sender).execute(Settings.MOUSE_WHEEL, String.valueOf(yWheel));
-			Log.e("W", ""+yWheel);
 		}
 		return true;
 	}

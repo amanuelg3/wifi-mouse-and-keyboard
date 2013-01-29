@@ -3,7 +3,6 @@ package softech.ad03.wifimouse.socket;
 import java.io.IOException;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 public class SendMessageAsyncTask extends AsyncTask<String, Void, Void> {
 	private Sender sender;

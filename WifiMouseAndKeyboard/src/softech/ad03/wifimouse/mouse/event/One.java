@@ -3,12 +3,16 @@ package softech.ad03.wifimouse.mouse.event;
 import softech.ad03.wifimouse.Settings;
 import softech.ad03.wifimouse.socket.SendMessageAsyncTask;
 import softech.ad03.wifimouse.socket.Sender;
+import android.util.Log;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 
 public class One implements OnGestureListener, OnDoubleTapListener {
 	private Sender sender;
+	private int moveCount;
+	private double tapTime;
+	private int wheelCount;
 
 	public One(Sender sender) {
 		this.sender = sender;
@@ -17,7 +21,8 @@ public class One implements OnGestureListener, OnDoubleTapListener {
 	@Override
 	public boolean onDoubleTap(MotionEvent e) {
 		// TODO Auto-generated method stub
-		new SendMessageAsyncTask(sender).execute(Settings.LEFT_MOUSE_DOWN);
+		tapTime = System.currentTimeMillis();
+		wheelCount = 0;
 		return true;
 	}
 
@@ -25,6 +30,12 @@ public class One implements OnGestureListener, OnDoubleTapListener {
 	public boolean onDoubleTapEvent(MotionEvent e) {
 		// TODO Auto-generated method stub
 		if (e.getAction() == MotionEvent.ACTION_MOVE) {
+
+			if (tapTime != 0 && System.currentTimeMillis() - tapTime > 200) {
+				tapTime = 0;
+				new SendMessageAsyncTask(sender).execute(Settings.LEFT_MOUSE_DOWN);
+			}
+				
 			Settings.xMove = e.getX() - Settings.xHistory;
 			Settings.yMove = e.getY() - Settings.yHistory;
 			Settings.xHistory = e.getX();
@@ -33,7 +44,12 @@ public class One implements OnGestureListener, OnDoubleTapListener {
 					String.valueOf(Settings.xMove),
 					String.valueOf(Settings.yMove));
 		} else if (e.getAction() == MotionEvent.ACTION_UP)
-			new SendMessageAsyncTask(sender).execute(Settings.LEFT_MOUSE_UP);
+			if (tapTime != 0 && System.currentTimeMillis() - tapTime <= 200)
+				new SendMessageAsyncTask(sender)
+						.execute(Settings.MOUSE_DOUBLE_CLICK);
+			else
+				new SendMessageAsyncTask(sender)
+						.execute(Settings.LEFT_MOUSE_UP);
 		return true;
 	}
 
@@ -49,13 +65,13 @@ public class One implements OnGestureListener, OnDoubleTapListener {
 		// TODO Auto-generated method stub
 		Settings.xHistory = e.getX();
 		Settings.yHistory = e.getY();
+		moveCount = 1;
 		return true;
 	}
 
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
@@ -67,15 +83,17 @@ public class One implements OnGestureListener, OnDoubleTapListener {
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 			float distanceY) {
-
-		// TODO Auto-generated method stub
 		Settings.xMove = e2.getX() - Settings.xHistory;
 		Settings.yMove = e2.getY() - Settings.yHistory;
 		Settings.xHistory = e2.getX();
 		Settings.yHistory = e2.getY();
-		new SendMessageAsyncTask(sender).execute(Settings.MOUSE_MOVE,
-				String.valueOf(Settings.xMove), String.valueOf(Settings.yMove));
+		if (moveCount != 1) {
 
+			new SendMessageAsyncTask(sender).execute(Settings.MOUSE_MOVE,
+					String.valueOf(Settings.xMove),
+					String.valueOf(Settings.yMove));
+		}
+		moveCount++;
 		return true;
 	}
 

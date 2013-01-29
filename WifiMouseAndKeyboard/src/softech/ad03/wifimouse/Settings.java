@@ -32,6 +32,9 @@ public class Settings {
 	public static final String MOUSE_MOVE = "7";
     public static final String MOUSE_DOUBLE_CLICK = "8";
     public static final String MOUSE_WHEEL = "9";
+    public static final String VOLUME_UP = "10";
+    public static final String VOLUME_DOWN = "11";
+    
 	
 	
 	private static Context context;
